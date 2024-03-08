@@ -5,11 +5,17 @@ import LoadingSpinner from "@/app/Loading"; // Assurez-vous que le chemin d'accÃ
 
 interface PokemonProps {
   id: number;
-  name: string;
-  sprite: string;
+  // name: string;
+  sprites: {regular : string;};
   image: string;
   types: { name: string; image: string }[];
   pokedex_id: number;
+   
+  name: {
+    fr: string;
+    en: string;
+    jp: string;
+  };
 }
 
 interface TypesProps {
@@ -130,7 +136,7 @@ export default function PokemonPage() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {currentPokemons.map((pokemon, index) => (
-          <Link href={`/pokemon/${pokemon.name.fr}`} key={index} legacyBehavior>
+          <Link href={`/pokemon/${encodeURIComponent(pokemon.name.fr)}`} key={index} legacyBehavior>
             <a className="flex flex-col justify-center items-center bg-white rounded-lg border border-gray-200 shadow-lg overflow-hidden">
               <h3 className="text-xl font-semibold tracking-tight text-gray-900 p-4">
                 {pokemon.name.fr} nÂ°{pokemon.pokedex_id}
