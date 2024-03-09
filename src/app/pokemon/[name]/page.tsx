@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import LoadingSpinner from "@/app/Loading";
 import PokeError from "@/components/error/errorPoke";
 import MissingNo from "@/components/MissingNoError/MissingNoError";
+import ToggleDarkMode from "@/components/DarkMode/DarkMode";
 
 interface PokemonSoloProps {
   id: number;
@@ -11,26 +12,33 @@ interface PokemonSoloProps {
     en: string;
     jp: string;
   };
-  sprites: {regular : string;};
+  sprites: { regular: string };
   image: string;
- 
-  types :Array<{
+
+  types: Array<{
     name: string;
     image: string;
-  }>
-  stats: {hp: number;atk: number;def: number;spe_atk:number;spe_def:number;vit: number;};
+  }>;
+  stats: {
+    hp: number;
+    atk: number;
+    def: number;
+    spe_atk: number;
+    spe_def: number;
+    vit: number;
+  };
 
   resistances: Array<{
     name: string;
-    multiplier:number;
-  }>
+    multiplier: number;
+  }>;
   generation: number;
   pokedex_id: number;
 
-talents:Array<{
-  name : string;
-  image: string;
-}>;
+  talents: Array<{
+    name: string;
+    image: string;
+  }>;
   evolution: {
     pre: Array<{
       pokedex_id: number;
@@ -50,7 +58,7 @@ const PokemonDetailPage = ({ params }: { params: { name: string } }) => {
   const [pokemonSolo, setPokemonSolo] = useState<PokemonSoloProps | null>(null);
   const pokemonName = decodeURIComponent(params.name);
   console.log(pokemonName);
-  
+
   useEffect(() => {
     const fetchPokemonSolo = async (name: string) => {
       try {
@@ -70,74 +78,80 @@ const PokemonDetailPage = ({ params }: { params: { name: string } }) => {
     fetchPokemonSolo(params.name);
   }, [params.name]);
 
-  if ( params.name === 'MissingNo.') {
-    return <MissingNo/>;
+  if (params.name === "0") {
+    return <MissingNo />;
   }
   if (!pokemonSolo) return <LoadingSpinner />;
-  // if (!pokemonSolo.name) return <PokeError />;
+  if (!pokemonSolo.name) return <PokeError />;
   // if (!pokemonSolo || !pokemonSolo.name) {
   //   // Afficher un message de chargement ou une autre UI pour indiquer que les données sont en cours de chargement
   //   return <div>Chargement...</div>;
-    
-    
+
   // }
 
   return (
-    <div className="max-w-2xl mx-auto my-8 p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-2xl mx-auto my-8 p-6 bg-white rounded-lg shadow-md dark:bg-gray-800">
       <button
         onClick={() => window.history.back()}
-        className="mb-5 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="mb-5 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 dark:bg-blue-700 dark:hover:bg-blue-800"
       >
         Retour
       </button>
-      <h1 className="text-3xl font-bold text-gray-800 mb-2">
-        {pokemonName}
+      
+      <div className="-mb-10">
+        <ToggleDarkMode />
+      </div>
+
+      <h1 className="text-3xl font-bold text-gray-800 mb-2 dark:text-white">
+        {pokemonSolo.name.fr}
       </h1>
-      <h2 className="text-xl text-gray-700">
+      <h2 className="text-xl text-gray-700 dark:text-gray-300">
         Numéro de Pokédex n°{pokemonSolo.pokedex_id}
       </h2>
-      <h3 className="text-lg text-gray-600 mb-4">
+      <h3 className="text-lg text-gray-600 mb-4 dark:text-gray-400">
         Pokemon de génération : {pokemonSolo.generation}
       </h3>
       <img
-        src={pokemonSolo?.sprites?.regular} alt={`Sprite de ${pokemonSolo?.name?.fr}`}
-       
+        src={pokemonSolo?.sprites?.regular}
+        alt={`Sprite de ${pokemonSolo?.name?.fr}`}
         className="mx-auto h-96 w-96 mb-2 -mt-10"
       />
 
       <div className="mt-4 mx-14 flex justify-around">
-        {pokemonSolo?.types && pokemonSolo.types.map((type,typeIndex) => (
-          <div
-            key={typeIndex}
-            className="inline-flex items-center mr-2 mb-2 px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full"
-          >
-            <img className="w-6 h-6" src={type.image}  />
-            <p className="ml-2">{type.name}</p>
-          </div>
-        ))}
+        {pokemonSolo?.types &&
+          pokemonSolo.types.map((type, typeIndex) => (
+            <div
+              key={typeIndex}
+              className="inline-flex items-center mr-2 mb-2 px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full dark:bg-blue-900 dark:text-blue-300"
+            >
+              <img className="w-6 h-6" src={type.image} />
+              <p className="ml-2">{type.name}</p>
+            </div>
+          ))}
       </div>
 
       <div className="mt-4 mx-14 flex justify-around">
-        <p>Talent possible :</p>
+        <p className="dark:text-gray-200">Talent possible :</p>
         {pokemonSolo?.talents?.map((type, typeIndex) => (
           <div
             key={typeIndex}
-            className="inline-flex items-center mr-2 mb-2 px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full"
+            className="inline-flex items-center mr-2 mb-2 px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full dark:bg-blue-900 dark:text-blue-300"
           >
             <p>{type.name}</p>
           </div>
         ))}
       </div>
 
-      <div className="mt-6">
-        <h2 className="text-2xl font-semibold text-gray-800 mb-3">
+      <div className="mt-6 dark:text-gray-200">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-3 dark:text-white">
           Statistique
         </h2>
         <p>
           HP: <span className="font-semibold">{pokemonSolo?.stats?.hp}</span>
         </p>
         <p>
-          Attack: <span className="font-semibold">{pokemonSolo?.stats?.atk}</span>
+          Attack:{" "}
+          <span className="font-semibold">{pokemonSolo?.stats?.atk}</span>
         </p>
         <p>
           Défense:{" "}
@@ -159,8 +173,11 @@ const PokemonDetailPage = ({ params }: { params: { name: string } }) => {
 
       <div className="mt-6">
         {pokemonSolo.resistances?.map((resistance, typeIndex) => (
-          <div key={typeIndex} className="bg-gray-100 p-4 rounded-lg mb-4">
-            <span className="text-sm font-medium text-gray-700">
+          <div
+            key={typeIndex}
+            className="bg-gray-100 p-4 rounded-lg mb-4 dark:bg-gray-700 dark:text-gray-200"
+          >
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Type : {resistance.name}
             </span>
             <p>
@@ -171,29 +188,39 @@ const PokemonDetailPage = ({ params }: { params: { name: string } }) => {
         ))}
       </div>
 
-      <div className="max-w-2xl mx-auto my-8 p-6 bg-white rounded-lg shadow-md">
+      <div className="max-w-2xl mx-auto my-8 p-6 bg-white rounded-lg shadow-md dark:bg-gray-700 dark:text-gray-200">
         {/* ... Autres informations sur le Pokémon ... */}
         {pokemonSolo.evolution && (
-        <div>
-          {pokemonSolo.evolution.pre && pokemonSolo.evolution.pre.length > 0 && (
-            <div>
-              <h3 className="text-lg text-gray-600 mb-4">Pré-évolutions :</h3>
-              {pokemonSolo.evolution.pre.map(evo => (
-                <div key={evo.pokedex_id}>{evo.name} (au {evo.condition})</div>
-              ))}
-            </div>
-          )}
+          <div>
+            {pokemonSolo.evolution.pre &&
+              pokemonSolo.evolution.pre.length > 0 && (
+                <div>
+                  <h3 className="text-lg text-gray-600 mb-4">
+                    Pré-évolutions :
+                  </h3>
+                  {pokemonSolo.evolution.pre.map((evo) => (
+                    <div key={evo.pokedex_id}>
+                      {evo.name} (au {evo.condition})
+                    </div>
+                  ))}
+                </div>
+              )}
 
-          {pokemonSolo.evolution.next && pokemonSolo.evolution.next.length > 0 && (
-            <div>
-              <h3 className="text-lg text-gray-600 mb-4">Évolutions suivantes :</h3>
-              {pokemonSolo.evolution.next.map(evo => (
-                <div key={evo.pokedex_id}>{evo.name} (au {evo.condition})</div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+            {pokemonSolo.evolution.next &&
+              pokemonSolo.evolution.next.length > 0 && (
+                <div className="">
+                  <h3 className="text-lg text-gray-600 mb-4 dark:text-gray-300">
+                    Évolutions suivantes :
+                  </h3>
+                  {pokemonSolo.evolution.next.map((evo) => (
+                    <div className="dark:text-gray-300" key={evo.pokedex_id}>
+                      {evo.name} (au {evo.condition})
+                    </div>
+                  ))}
+                </div>
+              )}
+          </div>
+        )}
       </div>
     </div>
   );
