@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import LoadingSpinner from "@/app/Loading"; // Assurez-vous que le chemin d'accès est correct
 import ToggleDarkMode from "@/components/DarkMode/DarkMode";
+import FlipCard from "@/components/carteFlip/FlipCard";
 
 interface PokemonProps {
   id: number;

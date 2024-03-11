@@ -14,6 +14,9 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      transitionDuration: {
+        '1000': '1000ms', // Ajoute une classe pour une durée de 1000ms
+      },
     },
   },
   plugins: [],
